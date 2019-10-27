@@ -1,0 +1,51 @@
+<?php
+require 'controller/db_credentials.php';
+$foldname = $_GET['Folder_name'];
+// Getting uploaded file
+$file = $_FILES["file"];
+$fname = $file["name"];
+
+if ($foldname == 'uploads') 
+{
+	// Uploading in "uplaods" folder
+move_uploaded_file($file["tmp_name"], "uploads/" . $fname);
+
+try 
+{
+	$upqry = "INSERT INTO `filelist` VALUES ('$fname', CURRENT_TIMESTAMP)";
+    $conn->query($upqry);
+} 
+catch (PDOException $e) 
+{
+	echo '<script>console.log("File not upload yet!")</script>';
+}
+
+echo "<script>window.location.assign('index.php')</script>";
+
+// Redirecting back
+// header("Location: index.php");
+}
+else
+{
+	// Uploading in "uplaods" folder
+move_uploaded_file($file["tmp_name"], $foldname . "/" . $fname);
+
+try 
+{
+	$upqry = "INSERT INTO `folderlist` VALUES ('$foldname','$fname', CURRENT_TIMESTAMP)";
+    $conn->query($upqry);
+} 
+catch (PDOException $e) 
+{
+	echo '<script>console.log("File not upload yet!")</script>';
+}
+
+echo "<script>window.location.assign('index.php')</script>";
+
+// Redirecting back
+// header("Location: index.php");
+}
+
+
+
+?> 
